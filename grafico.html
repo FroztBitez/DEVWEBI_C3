@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <style>
+        .h1 {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            color: black;
+            font-size: 20px;
+
+        }
+
+        header {
+            text-align: center;
+            background: #785D56;
+            color: #fff;
+            margin-bottom: 100px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+
+        .container {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        .canvas-container {
+            min-height: 300px;
+            max-height: 600px;
+            position: relative;
+        }
+
+        .widget {
+            position: relative;
+            margin-bottom: 300px;
+            background: #F6F2F1;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .footer {
+            font-size: 20px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #785D56;
+            color: white;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        . @media only screen and (min-width:300px) {
+            .container {
+                width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media only screen and (min-width:600px) {
+            .container {
+                width: 580px;
+                margin: 0 auto;
+            }
+
+            .third {
+                float: left;
+                width: 47.5%;
+                margin-left: 5%;
+            }
+
+            .third:first-child {
+                margin-left: 0;
+            }
+
+            .third:last-child {
+                display: block;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        @media only screen and (min-width:960px) {
+            .container {
+                width: 940px;
+            }
+
+            .third {
+                float: left;
+                width: 30%;
+                margin-left: 2.5%;
+                margin-right: 2.5%;
+            }
+
+            .third:first-child {
+                margin-left: 0;
+            }
+
+            .third:last-child {
+                margin-right: 0;
+                margin-left: 2.5%;
+                width: 30%;
+            }
+        }
+
+        @media only screen and (min-width:1140px) {
+            .container {
+                width: 1120px;
+            }
+        }
+
+        @media only screen and (min-width:1360px) {
+            .container {
+                width: 1300px;
+            }
+        }
+    </style>
+
+    <div class=""></div>
+    <header>
+
+        <div class="container">
+
+            <h1>Trabalho C3 - Dev I</h1>
+
+        </div>
+
+    </header>
+
+
+    <div class="container">
+
+        <div class=" third widget">
+
+            <div class="canvas-container">
+                <canvas id="myChart" width="800" height="800"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+        <p>Rodapé</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+
+    <script>
+        var socket = io();
+        let dados = [];
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Maria', 'Alair', 'Bruna', 'Dian', 'Saulo'],
+                datasets: [{
+                    label: 'Rendimento',
+                    data: dados,
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 206, 73, 1)',
+                        'rgba(255, 206, 25, 1)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 206, 73, 1)',
+                        'rgba(255, 206, 25, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        socket.on('#dado', function (msg) {
+
+
+            let limit = 5;
+            if (limit == dados.length) {
+                dados.splice(0, 1);
+            }
+            dados.push(parseInt(msg));
+            console.log(dados);
+            myChart.update();
+
+
+        });
+    </script>
+</body>
+
+</html>
